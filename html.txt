@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mytho</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"> <!-- FontAwesome CDN -->
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            font-family: 'Syne', sans-serif;
+            box-sizing: border-box;
+            color: white; /* Ensure all text is white */
+        }
+        .banner, .commands {
+            height: 100vh;
+            background-size: cover;
+            background-position: center;
+        }
+        .banner {
+            background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('bg.jpg');
+        }
+        .commands {
+            background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('bg2.jpg');
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .navbar {
+            width: 85%;
+            margin: auto;
+            padding: 35px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo {
+            width: 120px;
+            cursor: pointer;
+        }
+        .navbar ul {
+            display: flex;
+            list-style: none;
+        }
+        .navbar ul li {
+            margin: 0 20px;
+        }
+        .navbar ul li a {
+            color: white;
+            text-decoration: none;
+            text-transform: uppercase;
+        }
+        .content {
+            width: 100%;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+        .category {
+            cursor: pointer;
+            margin: 20px;
+            font-size: 24px;
+            text-transform: uppercase;
+            display: flex;
+            align-items: center;
+        }
+        .category i {
+            margin-right: 10px;
+        }
+        ul.commands-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out;
+        }
+        ul.commands-list.expanded {
+            max-height: 500px; /* Adjust based on content */
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const categories = document.querySelectorAll('.category');
+
+            categories.forEach(category => {
+                category.addEventListener('click', function() {
+                    const commandsList = this.nextElementSibling;
+                    commandsList.classList.toggle('expanded');
+                });
+            });
+        });
+    </script>
+</head>
+<body>
+    <div class="banner">
+        <div class="navbar">
+            <img src="logo.png" class="logo">
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Support</a></li>
+                <li><a href="#">Commands</a></li>
+                <li><a href="#">Invite</a></li>
+            </ul>
+        </div>
+        <div class="content">
+            <h1>Mytho</h1>
+            <p>Mytho, developed by Reduce, a company focused on innovative technology solutions.</p>
+            <div>
+                <button type="button">Invite</button>
+                <button type="button">Support</button>
+            </div>
+        </div>
+    </div>
+    <!-- Commands Section -->
+    <div class="commands">
+        <h2>Available Commands</h2>
+        <div class="category"><i class="fas fa-info-circle"></i> Info</div>
+        <ul class="commands-list">
+            <li><code>/info status</code> - Check system status</li>
+            <li><code>/info stats</code> - View bot statistics</li>
+        </ul>
+        <div class="category"><i class="fas fa-user-shield"></i> Admin</div>
+        <ul class="commands-list">
+            <li><code>/admin kick</code> - Kick a user</li>
+            <li><code>/admin ban</code> - Ban a user</li>
+        </ul>
+        <div class="category"><i class="fas fa-crown"></i> Owner</div>
+        <ul class="commands-list">
+            <li><code>/owner reset</code> - Reset all settings</li>
+            <li><code>/owner shutdown</code> - Shutdown the bot</li>
+        </ul>
+    </div>
+</body>
+</html>

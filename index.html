@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mytho</title>
+    <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+            font-family: 'Syne', sans-serif;
+            box-sizing: border-box;
+            color: white; /* Ensure all text is white */
+        }
+        body, html {
+            height: 100%;
+            overflow: auto; /* Allow scrolling */
+        }
+        .banner, .commands {
+            min-height: 100vh; /* Minimum height, allows for larger content */
+            width: 100%;
+            background-size: cover;
+            background-position: center;
+            position: relative; /* Ensure stacking context for overlay */
+        }
+        .banner {
+            background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('bg.jpg');
+        }
+        .commands {
+            background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('bg2.jpg');
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .navbar {
+            width: 85%;
+            margin: auto;
+            padding: 35px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .logo {
+            width: 120px;
+            cursor: pointer;
+        }
+        .navbar ul {
+            display: flex;
+            list-style: none;
+        }
+        .navbar ul li {
+            margin: 0 20px;
+        }
+        .navbar ul li a {
+            color: white;
+            text-decoration: none;
+            text-transform: uppercase;
+        }
+        .content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+        .content button {
+            width: 200px;
+            padding: 15px 0;
+            margin: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            background: none;
+            border: 2px solid white;
+            border-radius: 25px;
+            cursor: pointer;
+            transition: background-color 0.5s, transform 0.3s;
+        }
+        .content button:hover {
+            background-color: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
+        }
+        .overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            color: white;
+            pointer-events: all;
+        }
+    </style>
+</head>
+<body>
+    <div class="banner">
+        <div class="navbar">
+            <img src="logo.png" class="logo">
+            <ul>
+                <li><a href="#">Home</a></li>
+                <li><a href="#">Support</a></li>
+                <li><a href="#">Commands</a></li>
+                <li><a href="#">Invite</a></li>
+            </ul>
+        </div>
+        <div class="content">
+            <h1>Mytho</h1>
+            <p>Mytho, developed by Reduce, a company focused on innovative technology solutions.</p>
+            <button type="button">Invite</button>
+            <button type="button">Support</button>
+        </div>
+    </div>
+    <div class="commands">
+        <h2>Available Commands</h2>
+    </div>
+    <div class="overlay">Coming Soon</div>
+</body>
+</html>
