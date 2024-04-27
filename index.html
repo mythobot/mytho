@@ -10,30 +10,37 @@
             padding: 0;
             margin: 0;
             font-family: 'Syne', sans-serif;
+            color: white;
             box-sizing: border-box;
-            color: white; /* Ensure all text is white */
         }
         body, html {
             height: 100%;
-            overflow: auto; /* Allow scrolling */
+            overflow: auto;
         }
-        .banner, .commands {
-            min-height: 100vh; /* Minimum height, allows for larger content */
-            width: 100%;
+        .banner, .commands, .information {
+            min-height: 100vh;
             background-size: cover;
             background-position: center;
-            position: relative; /* Ensure stacking context for overlay */
         }
         .banner {
             background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('bg.jpg');
         }
-        .commands {
+        .information, .commands {
             background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('bg2.jpg');
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            padding: 20px;
+        }
+        .commands-container, .information-container {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 30px;
+            border-radius: 15px;
+            width: 80%;
+            max-width: 960px;
             text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.5);
         }
         .navbar {
             width: 85%;
@@ -45,7 +52,6 @@
         }
         .logo {
             width: 120px;
-            cursor: pointer;
         }
         .navbar ul {
             display: flex;
@@ -55,48 +61,71 @@
             margin: 0 20px;
         }
         .navbar ul li a {
-            color: white;
             text-decoration: none;
             text-transform: uppercase;
         }
-        .content {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+        .content, .category-content {
+            position: relative;
             text-align: center;
+            padding-top: 20vh;
         }
-        .content button {
-            width: 200px;
-            padding: 15px 0;
+        button {
+            padding: 12px 25px;
             margin: 10px;
             font-size: 16px;
             font-weight: bold;
-            color: white;
             background: none;
             border: 2px solid white;
             border-radius: 25px;
             cursor: pointer;
-            transition: background-color 0.5s, transform 0.3s;
+            transition: background-color 0.3s, transform 0.3s;
         }
-        .content button:hover {
+        button:hover {
             background-color: rgba(255, 255, 255, 0.2);
-            transform: scale(1.1);
         }
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 1000;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 48px;
-            color: white;
-            pointer-events: all;
+        .footer {
+            text-align: center;
+            padding: 20px 0;
+            background: black;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        .gradient-title, .information-title, .commands-title {
+            font-size: 40px;
+            background: linear-gradient(to right, white, #cccccc);
+            background-size: 200% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: liquid 5s ease-in-out infinite;
+            text-shadow: 0px 0px 10px rgba(255, 255, 255);
+        }
+        .category, .info-category {
+            cursor: pointer;
+            margin: 10px 15px;
+            font-size: 20px;
+            display: inline-block;
+            transition: transform 0.3s ease-in-out, border-bottom 0.3s ease;
+            border-bottom: 3px solid transparent;
+            padding-bottom: 5px;
+        }
+        .category.active, .category:hover, .info-category.active, .info-category:hover {
+            border-bottom: 3px solid white;
+        }
+        ul.commands-list, .info-text {
+            list-style: none;
+            padding: 0;
+            margin-top: 5px;
+            transition: all 0.5s ease;
+            width: 90%;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            text-align: left;
+            padding: 10px;
+            display: none;
+        }
+        ul.commands-list.active, .info-text.active {
+            display: block;
+            max-height: 500px;
+            opacity: 1;
         }
     </style>
 </head>
@@ -106,21 +135,83 @@
             <img src="logo.png" class="logo">
             <ul>
                 <li><a href="#">Home</a></li>
-                <li><a href="#">Support</a></li>
+                <li><a href="#">Information</a></li>
                 <li><a href="#">Commands</a></li>
-                <li><a href="#">Invite</a></li>
+                <li><a href="https://discord.com/oauth2/authorize?client_id=1223343717184835754">Invite</a></li>
             </ul>
         </div>
         <div class="content">
-            <h1>Mytho</h1>
-            <p>Mytho, developed by Reduce, a company focused on innovative technology solutions.</p>
+            <h1 class="gradient-title">Mytho</h1>
+            <p>Developed by Reduce, a company focused on innovative technology solutions.</p>
             <button type="button">Invite</button>
             <button type="button">Support</button>
         </div>
     </div>
-    <div class="commands">
-        <h2>Available Commands</h2>
+    <div class="information">
+        <div class="information-container">
+            <h2 class="information-title">Information</h2>
+            <div class="info-category" data-target="privacy" onclick="toggleInformation('privacy')"><i class="fas fa-user-secret"></i> Privacy Policy</div>
+            <div class="info-text" id="privacy">
+                <p>Here is our privacy policy detail...</p>
+            </div>
+            <div class="info-category" data-target="terms" onclick="toggleInformation('terms')"><i class="fas fa-file-contract"></i> Terms of Use</div>
+            <div class="info-text" id="terms">
+                <p>Here are our terms of use...</p>
+            </div>
+        </div>
     </div>
-    <div class="overlay">Coming Soon</div>
+    <div class="commands">
+        <div class="commands-container">
+          <h2 class="commands-title">Commands</h2>
+            <div class="category" data-target="info" onclick="toggleCommands('info')"><i class="fas fa-info-circle"></i> Info</div>
+            <ul class="commands-list" id="info">
+                <li><code>/info status</code> - Check system status</li>
+                <li><code>/info stats</code> - View bot statistics</li>
+            </ul>
+            <div class="category" data-target="admin" onclick="toggleCommands('admin')"><i class="fas fa-user-shield"></i> Admin</div>
+            <ul class="commands-list" id="admin">
+                <li><code>/admin kick</code> - Kick a user</li>
+                <li><code>/admin ban</code> - Ban a user</li>
+            </ul>
+            <div class="category" data-target="owner" onclick="toggleCommands('owner')"><i class="fas fa-crown"></i> Owner</div>
+            <ul class="commands-list" id="owner">
+                <li><code>/owner reset</code> - Reset all settings</li>
+                <li><code>/owner shutdown</code> - Shutdown the bot</li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer">
+        <p>&copy; 2024 Mytho. All rights reserved.</p>
+    </div>
+    <script>
+        function toggleCommands(categoryId) {
+            const allCategories = document.querySelectorAll('.commands-list');
+            const targetCategory = document.getElementById(categoryId);
+
+            allCategories.forEach(category => {
+                if (category.id === categoryId) {
+                    category.style.display = category.style.display === 'block' ? 'none' : 'block';
+                    category.previousElementSibling.classList.toggle('active'); // Toggle the active class on the category
+                } else {
+                    category.style.display = 'none';
+                    category.previousElementSibling.classList.remove('active'); // Remove active class from other categories
+                }
+            });
+        }
+        function toggleInformation(categoryId) {
+            const allTexts = document.querySelectorAll('.info-text');
+            const targetText = document.getElementById(categoryId);
+
+            allTexts.forEach(text => {
+                if (text.id === categoryId) {
+                    text.style.display = text.style.display === 'block' ? 'none' : 'block';
+                    text.previousElementSibling.classList.toggle('active'); // Toggle the active class on the info-category
+                } else {
+                    text.style.display = 'none';
+                    text.previousElementSibling.classList.remove('active'); // Remove active class from other info-categories
+                }
+            });
+        }
+    </script>
 </body>
 </html>
