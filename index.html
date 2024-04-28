@@ -128,15 +128,44 @@
             opacity: 1;
         }
     </style>
+  <script>
+      document.addEventListener('DOMContentLoaded', function () {
+          const faders = document.querySelectorAll('.banner, .information, .commands');
+          const appearOptions = {
+              threshold: 0.1,
+              rootMargin: "0px 0px -100px 0px"
+          };
+
+          const appearOnScroll = new IntersectionObserver(function(
+              entries,
+              appearOnScroll
+          ) {
+              entries.forEach(entry => {
+                  if (!entry.isIntersecting) {
+                      return;
+                  } else {
+                      entry.target.classList.add('is-visible');
+                      entry.target.style.opacity = "1";
+                      entry.target.style.transform = "translateY(0)";
+                      appearOnScroll.unobserve(entry.target);
+                  }
+              });
+          }, appearOptions);
+
+          faders.forEach(fader => {
+              appearOnScroll.observe(fader);
+          });
+      });
+  </script>
 </head>
 <body>
-    <div class="banner">
+    <div class="banner" id="home">
         <div class="navbar">
             <img src="logo.png" class="logo">
             <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Information</a></li>
-                <li><a href="#">Commands</a></li>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#info">Information</a></li>
+                <li><a href="#cmds">Commands</a></li>
                 <li><a href="https://discord.com/oauth2/authorize?client_id=1223343717184835754">Invite</a></li>
             </ul>
         </div>
@@ -147,20 +176,22 @@
             <button type="button">Support</button>
         </div>
     </div>
-    <div class="information">
+    <div class="information" id="info">
         <div class="information-container">
             <h2 class="information-title">Information</h2>
-            <div class="info-category" data-target="privacy" onclick="toggleInformation('privacy')"><i class="fas fa-user-secret"></i> Privacy Policy</div>
-            <div class="info-text" id="privacy">
-                <p>Here is our privacy policy detail...</p>
-            </div>
-            <div class="info-category" data-target="terms" onclick="toggleInformation('terms')"><i class="fas fa-file-contract"></i> Terms of Use</div>
-            <div class="info-text" id="terms">
-                <p>Here are our terms of use...</p>
+          <div class="info-category" data-target="privacy" onclick="toggleInformation('privacy')"><i class="fas fa-user-secret"></i> Privacy Policy</div>
+          <div class="info-text" id="privacy">
+              <p>At Mytho, operated by Reduce, we hold the utmost respect for your privacy. Only the Founder & CEO of the project has access to your personal information. Your privacy is of paramount importance to us. Please be assured that any personal information we collect is solely for educational purposes.</p>
+          </div>
+          <div class="info-category" data-target="terms" onclick="toggleInformation('terms')"><i class="fas fa-file-contract"></i> Terms of Use</div>
+          <div class="info-text" id="terms">
+              <p>1. Acceptance of Terms</p>
+              <p>By accessing and using the Mytho Discord bot “Mytho”, you agree to be bound by these Terms of Use "Terms". These Terms are a legal agreement between you and Reduce (the “Company”), the operator of Mytho. If you do not agree to these Terms, please do not use Mytho.</p>
+              <p>_</p>
             </div>
         </div>
     </div>
-    <div class="commands">
+    <div class="commands" id="cmds">
         <div class="commands-container">
           <h2 class="commands-title">Commands</h2>
             <div class="category" data-target="info" onclick="toggleCommands('info')"><i class="fas fa-info-circle"></i> Info</div>
