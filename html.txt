@@ -4,30 +4,43 @@
     <meta charset="UTF-8">
     <title>Mytho</title>
     <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css"> <!-- FontAwesome CDN -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css">
     <style>
         * {
             padding: 0;
             margin: 0;
             font-family: 'Syne', sans-serif;
+            color: white;
             box-sizing: border-box;
-            color: white; /* Ensure all text is white */
         }
-        .banner, .commands {
-            height: 100vh;
+        body, html {
+            height: 100%;
+            overflow: auto;
+        }
+        .banner, .commands, .information {
+            min-height: 100vh;
             background-size: cover;
             background-position: center;
         }
         .banner {
             background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('bg.jpg');
         }
-        .commands {
+        .information, .commands {
             background-image: linear-gradient(rgba(0,0,0,0.5), rgba(0,0,0,0.5)), url('bg2.jpg');
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
+            padding: 20px;
+        }
+        .commands-container, .information-container {
+            background: rgba(0, 0, 0, 0.6);
+            padding: 30px;
+            border-radius: 15px;
+            width: 80%;
+            max-width: 960px;
             text-align: center;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.5);
         }
         .navbar {
             width: 85%;
@@ -39,7 +52,6 @@
         }
         .logo {
             width: 120px;
-            cursor: pointer;
         }
         .navbar ul {
             display: flex;
@@ -49,92 +61,214 @@
             margin: 0 20px;
         }
         .navbar ul li a {
-            color: white;
             text-decoration: none;
             text-transform: uppercase;
         }
-        .content {
-            width: 100%;
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
+        .content, .category-content {
+            position: relative;
             text-align: center;
+            padding-top: 20vh;
         }
-        .category {
+        button {
+            padding: 12px 25px;
+            margin: 10px;
+            font-size: 16px;
+            font-weight: bold;
+            background: none;
+            border: 2px solid white;
+            border-radius: 25px;
             cursor: pointer;
-            margin: 20px;
-            font-size: 24px;
-            text-transform: uppercase;
-            display: flex;
-            align-items: center;
+            transition: background-color 0.3s, transform 0.3s;
         }
-        .category i {
-            margin-right: 10px;
+        button:hover {
+            background-color: rgba(255, 255, 255, 0.2);
         }
-        ul.commands-list {
+        .footer {
+            text-align: center;
+            padding: 20px 0;
+            background: black;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        .gradient-title, .information-title, .commands-title {
+            font-size: 40px;
+            background: linear-gradient(to right, white, #cccccc);
+            background-size: 200% 100%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: liquid 5s ease-in-out infinite;
+            text-shadow: 0px 0px 10px rgba(255, 255, 255);
+        }
+        .category, .info-category {
+            cursor: pointer;
+            margin: 10px 15px;
+            font-size: 20px;
+            display: inline-block;
+            transition: transform 0.3s ease-in-out, border-bottom 0.3s ease;
+            border-bottom: 3px solid transparent;
+            padding-bottom: 5px;
+        }
+        .category.active, .category:hover, .info-category.active, .info-category:hover {
+            border-bottom: 3px solid white;
+        }
+        ul.commands-list, .info-text {
             list-style: none;
             padding: 0;
-            margin: 0;
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.5s ease-out;
+            margin-top: 5px;
+            transition: all 0.5s ease;
+            width: 90%;
+            background: rgba(0, 0, 0, 0.7);
+            border-radius: 10px;
+            text-align: left;
+            padding: 10px;
+            display: none;
         }
-        ul.commands-list.expanded {
-            max-height: 500px; /* Adjust based on content */
+        ul.commands-list.active, .info-text.active {
+            display: block;
+            max-height: 500px;
+            opacity: 1;
         }
     </style>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            const categories = document.querySelectorAll('.category');
+  <script>
+      document.addEventListener('DOMContentLoaded', function () {
+          const faders = document.querySelectorAll('.banner, .information, .commands');
+          const appearOptions = {
+              threshold: 0.1,
+              rootMargin: "0px 0px -100px 0px"
+          };
 
-            categories.forEach(category => {
-                category.addEventListener('click', function() {
-                    const commandsList = this.nextElementSibling;
-                    commandsList.classList.toggle('expanded');
-                });
-            });
-        });
-    </script>
+          const appearOnScroll = new IntersectionObserver(function(
+              entries,
+              appearOnScroll
+          ) {
+              entries.forEach(entry => {
+                  if (!entry.isIntersecting) {
+                      return;
+                  } else {
+                      entry.target.classList.add('is-visible');
+                      entry.target.style.opacity = "1";
+                      entry.target.style.transform = "translateY(0)";
+                      appearOnScroll.unobserve(entry.target);
+                  }
+              });
+          }, appearOptions);
+
+          faders.forEach(fader => {
+              appearOnScroll.observe(fader);
+          });
+      });
+  </script>
 </head>
 <body>
-    <div class="banner">
+    <div class="banner" id="home">
         <div class="navbar">
             <img src="logo.png" class="logo">
             <ul>
-                <li><a href="#">Home</a></li>
-                <li><a href="#">Support</a></li>
-                <li><a href="#">Commands</a></li>
-                <li><a href="#">Invite</a></li>
+                <li><a href="#home">Home</a></li>
+                <li><a href="#info">Information</a></li>
+                <li><a href="#cmds">Commands</a></li>
+                <li><a href="https://discord.com/oauth2/authorize?client_id=1223343717184835754">Invite</a></li>
             </ul>
         </div>
         <div class="content">
-            <h1>Mytho</h1>
-            <p>Mytho, developed by Reduce, a company focused on innovative technology solutions.</p>
-            <div>
-                <button type="button">Invite</button>
-                <button type="button">Support</button>
+            <h1 class="gradient-title">Mytho</h1>
+            <p>Developed by Reduce, a company focused on innovative technology solutions.</p>
+            <button type="button">Invite</button>
+            <button type="button">Support</button>
+        </div>
+    </div>
+    <div class="information" id="info">
+        <div class="information-container">
+            <h2 class="information-title">Information</h2>
+          <div class="info-category" data-target="privacy" onclick="toggleInformation('privacy')"><i class="fas fa-user-secret"></i> Privacy Policy</div>
+          <div class="info-text" id="privacy">
+              <p>At Mytho, operated by Reduce, we hold the utmost respect for your privacy. Only the Founder & CEO of the project has access to your personal information. Your privacy is of paramount importance to us. Please be assured that any personal information we collect is solely for educational purposes.</p>
+          </div>
+          <div class="info-category" data-target="terms" onclick="toggleInformation('terms')"><i class="fas fa-file-contract"></i> Terms of Use</div>
+          <div class="info-text" id="terms">
+              <p>1. Acceptance of Terms</p>
+              <p>By accessing and using the Mytho Discord bot “Mytho”, you agree to be bound by these Terms of Use "Terms". These Terms are a legal agreement between you and Reduce (the “Company”), the operator of Mytho. If you do not agree to these Terms, please do not use Mytho.</p>
+              <p>_</p>
+            <p>2. Description of Service</p>
+            <p>Mytho is a safeguard bot designed to enhance the security and management of Discord servers. It offers various functionalities that help manage server interactions and protect against common security threats.</p>
+            <p>_</p>
+            <p>3. Modifications to Terms</p>
+            <p>The Company reserves the right, at its discretion, to modify these Terms at any time. You are responsible for reviewing and becoming familiar with any such modifications. Use of the Services by you following such notification constitutes your acceptance of the terms and conditions of the Terms as modified.</p>
+            <p>_</p>
+            <p>4. Use of the Service</p>
+            <p>You agree to use Mytho only for purposes that are permitted by these Terms and any applicable law, regulations, or generally accepted practices or guidelines in the relevant jurisdictions.</p>
+            <p>_</p>
+            <p>5. Your Registration Obligations</p>
+            <p>You may be required to register with Discord and be logged into your account to access Mytho. You are responsible for maintaining the confidentiality of your login information and are fully responsible for all activities that occur under your account.</p>
+            <p>_</p>
+            <p>6. Privacy Policy</p>
+            <p>Information collected about you is subject to the terms of our Privacy Policy, which is hereby incorporated into and made part of these Terms. Please review our Privacy Policy to understand our practices in this area.</p>
+            <p>_</p>
+            <p>7. Termination</p>
+            <p>The Company may terminate or suspend access to Mytho immediately, without prior notice or liability, for any reason whatsoever, including, without limitation, if you breach the Terms.</p>
+            <p>_</p>
+            <p>8. Disclaimer of Warranties</p>
+            <p>Mytho is provided "as is" and "as available" without warranty of any kind. Your use of Mytho is at your sole risk. The Company expressly disclaims all warranties, whether express, implied, statutory, or otherwise, including, but not limited to, implied warranties of merchantability, fitness for a particular purpose, and non-infringement.</p>
+            <p>_</p>
+            <p>9. Limitation of Liability</p>
+            <p>To the fullest extent permitted by applicable law, in no event will the Company be liable for any indirect, special, incidental, punitive, exemplary, or consequential damages, whether or not the Company has been warned of the possibility of such damages.</p>
+            <p>_</p>
+            <p>10. Governing Law</p>
+            <p>These Terms shall be governed by the laws of the jurisdiction in which the Company is based, without regard to its conflict of law provisions.</p>
             </div>
         </div>
     </div>
-    <!-- Commands Section -->
-    <div class="commands">
-        <h2>Available Commands</h2>
-        <div class="category"><i class="fas fa-info-circle"></i> Info</div>
-        <ul class="commands-list">
-            <li><code>/info status</code> - Check system status</li>
-            <li><code>/info stats</code> - View bot statistics</li>
-        </ul>
-        <div class="category"><i class="fas fa-user-shield"></i> Admin</div>
-        <ul class="commands-list">
-            <li><code>/admin kick</code> - Kick a user</li>
-            <li><code>/admin ban</code> - Ban a user</li>
-        </ul>
-        <div class="category"><i class="fas fa-crown"></i> Owner</div>
-        <ul class="commands-list">
-            <li><code>/owner reset</code> - Reset all settings</li>
-            <li><code>/owner shutdown</code> - Shutdown the bot</li>
-        </ul>
+    <div class="commands" id="cmds">
+        <div class="commands-container">
+          <h2 class="commands-title">Commands</h2>
+            <div class="category" data-target="info" onclick="toggleCommands('info')"><i class="fas fa-info-circle"></i> Info</div>
+            <ul class="commands-list" id="info">
+                <li><code>/info status</code> - Check system status</li>
+                <li><code>/info stats</code> - View bot statistics</li>
+            </ul>
+            <div class="category" data-target="admin" onclick="toggleCommands('admin')"><i class="fas fa-user-shield"></i> Admin</div>
+            <ul class="commands-list" id="admin">
+                <li><code>/admin kick</code> - Kick a user</li>
+                <li><code>/admin ban</code> - Ban a user</li>
+            </ul>
+            <div class="category" data-target="owner" onclick="toggleCommands('owner')"><i class="fas fa-crown"></i> Owner</div>
+            <ul class="commands-list" id="owner">
+                <li><code>/owner reset</code> - Reset all settings</li>
+                <li><code>/owner shutdown</code> - Shutdown the bot</li>
+            </ul>
+        </div>
     </div>
+    <div class="footer">
+        <p>&copy; 2024 Mytho. All rights reserved.</p>
+    </div>
+    <script>
+        function toggleCommands(categoryId) {
+            const allCategories = document.querySelectorAll('.commands-list');
+            const targetCategory = document.getElementById(categoryId);
+
+            allCategories.forEach(category => {
+                if (category.id === categoryId) {
+                    category.style.display = category.style.display === 'block' ? 'none' : 'block';
+                    category.previousElementSibling.classList.toggle('active'); // Toggle the active class on the category
+                } else {
+                    category.style.display = 'none';
+                    category.previousElementSibling.classList.remove('active'); // Remove active class from other categories
+                }
+            });
+        }
+        function toggleInformation(categoryId) {
+            const allTexts = document.querySelectorAll('.info-text');
+            const targetText = document.getElementById(categoryId);
+
+            allTexts.forEach(text => {
+                if (text.id === categoryId) {
+                    text.style.display = text.style.display === 'block' ? 'none' : 'block';
+                    text.previousElementSibling.classList.toggle('active'); // Toggle the active class on the info-category
+                } else {
+                    text.style.display = 'none';
+                    text.previousElementSibling.classList.remove('active'); // Remove active class from other info-categories
+                }
+            });
+        }
+    </script>
 </body>
 </html>
